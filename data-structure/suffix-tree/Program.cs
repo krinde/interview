@@ -25,10 +25,10 @@
             else
             {
                 // randomly generate input strings.
-                var iterations = 100;
+                var iterations = 1000;
                 for (var i = 0; i < iterations; i++)
                 {
-                    var str = GetRandomString(random.Next(1,1000));
+                    var str = GetRandomString(random.Next(1,100));
                     var suffixTree = new SuffixTree(str.ToCharArray());
                     suffixTree.Build();
                     if (suffixTree.Validate())

@@ -115,6 +115,31 @@ namespace suffix_tree
             }
         }
 
+        private void DfsTraversal(SuffixNode root, List<char> result)
+        {
+            var suffix = result.ToList();
+            for (var i = root.Start; i <= root.EndIndex.End; i++)
+            {
+                suffix.Add(this._input[i]);
+            }
+
+            if (root.Index != -1)
+            {
+                Console.Write($"{root.Index}: ");
+                Console.Write(suffix.ToArray());
+                Console.WriteLine();
+                return;
+            }
+
+            foreach (var child in root.Children)
+            {
+                if (child != null)
+                {
+                    this.DfsTraversal(child, suffix);
+                }
+            }
+        }
+
         public bool Validate()
         {
             for (var i = 0; i < this._input.Length; i++)
@@ -172,31 +197,6 @@ namespace suffix_tree
             return this.Validate(node, input, index, curr);
         }
 
-        private void DfsTraversal(SuffixNode root, List<char> result)
-        {
-            var suffix = result.ToList();
-            for (var i = root.Start; i <= root.EndIndex.End; i++)
-            {
-                suffix.Add(this._input[i]);
-            }
-
-            if (root.Index != -1)
-            {
-                Console.Write($"{root.Index}: ");
-                Console.Write(suffix.ToArray());
-                Console.WriteLine();
-                return;
-            }
-
-            foreach (var child in root.Children)
-            {
-                if (child != null)
-                {
-                    this.DfsTraversal(child, suffix);
-                }
-            }
-        }
-
         private void StartPhase(int i)
         {
             // set lastCreatedSuffixNode as null before start of each phrase.
@@ -231,7 +231,8 @@ namespace suffix_tree
                 {
                     // If active length is not 0, it means we are traversing somewhere in middle.
                     // So check if next character is same as current char.
-                    if (ShouldApplyRule3(i))
+                    this.MoveForwardIfNeeded(i);
+                    if (this.IsNextCharMatched(i))
                     {
                         // If next character is same with current character, then apply rule 3 extension 
                         // and do trick 2 (show stopper), break out while loop.
@@ -304,8 +305,23 @@ namespace suffix_tree
             }
         }
 
+        // Move forward active point if current edge node's length is less than active length.
+        private void MoveForwardIfNeeded(int index)
+        {
+            var edgeNode = this.GetCurrentActiveEdgeNode();
+            if (edgeNode.Length < this._activePoint.ActiveLength)
+            {
+                // like X -> Y|?
+                this._activePoint.ActiveNode = edgeNode;
+                this._activePoint.ActiveEdge = this._activePoint.ActiveEdge + edgeNode.Length;
+                this._activePoint.ActiveLength = this._activePoint.ActiveLength - edgeNode.Length;
+
+                this.MoveForwardIfNeeded(index);
+            }
+        }
+
         // Find next character to be compared to current phase character.
-        private bool ShouldApplyRule3(int i)
+        private bool IsNextCharMatched(int i)
         {
             // Let's say i character is Z
             var edgeNode = this.GetCurrentActiveEdgeNode();
@@ -322,14 +338,9 @@ namespace suffix_tree
                 // ? == Z
                 return edgeNode.Children[this._input[i]] != null;
             }
-            else
-            {
-                // like X -> Y|?
-                this._activePoint.ActiveNode = edgeNode;
-                this._activePoint.ActiveEdge = this._activePoint.ActiveEdge + edgeNode.Length;
-                this._activePoint.ActiveLength = this._activePoint.ActiveLength - edgeNode.Length;
-                return ShouldApplyRule3(i);
-            }
+
+            // Always move forward if needed, then it won't get here.
+            return false;
         }
 
         private SuffixNode GetCurrentActiveEdgeNode()
