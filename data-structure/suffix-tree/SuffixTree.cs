@@ -1,6 +1,8 @@
 /**
  * This a C# version of https://github.com/mission-peace/interview/blob/master/src/com/interview/suffixprefix/SuffixTree.java
- * https://www.youtube.com/watch?v=aPRqocoBsFQ is a good explanation of this implementation.
+ * 
+ * https://www.youtube.com/watch?v=aPRqocoBsFQ is a good explanation of this implementation. 
+ * https://brenden.github.io/ukkonen-animation/ is a good playgroud of Ukkonen's algo.
 */
 
 /**
