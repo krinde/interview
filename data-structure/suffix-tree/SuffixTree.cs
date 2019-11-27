@@ -1,4 +1,6 @@
 /**
+ * Strongly recommend a tour on https://stackoverflow.com/questions/9452701/ukkonens-suffix-tree-algorithm-in-plain-english/9513423#9513423.
+ * 
  * This a C# version of https://github.com/mission-peace/interview/blob/master/src/com/interview/suffixprefix/SuffixTree.java
  * 
  * https://www.youtube.com/watch?v=aPRqocoBsFQ is a good explanation of this implementation. 
