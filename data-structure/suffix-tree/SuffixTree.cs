@@ -57,6 +57,7 @@
 
 /**
  * Further, we can do some space usage optimization. 
+ * Eg. use hashmap rather than array for children.
  * Eg. for leaf node, we don't have to store children.
  * Eg. for a-z character set, we can use ASCII number - 'a' as index.
 */
